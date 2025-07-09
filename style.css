@@ -1,0 +1,168 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: rgb(62, 62, 62);
+}
+
+.resume {
+  display: flex;
+  min-height: 100vh;
+}
+
+.left {
+  width: 70%;
+  background-color: #fff;
+  padding: 40px;
+}
+
+.right {
+  width: 30%;
+  background-color: #0059b3;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.right img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  margin-bottom: 20px;
+  object-fit: cover;
+}
+
+.name {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 500;
+  font-size: 36px;
+  line-height: 36px;
+  color: rgb(62, 62, 62);
+  margin-bottom: 5px;
+}
+
+.title {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 24px;
+  color: rgb(62, 62, 62);
+  margin-bottom: 15px;
+}
+
+.contact-info {
+  font-size: 13px;
+  line-height: 15px;
+  font-weight: 400;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 5px;
+}
+
+.contact-info span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.linkedin {
+  font-size: 13px;
+  line-height: 15px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 30px;
+}
+
+.section {
+  margin-bottom: 30px;
+}
+
+.section h2 {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  border-bottom: 1px solid rgb(62, 62, 62);
+  margin-bottom: 10px;
+}
+
+.summary-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 17px;
+  font-weight: 400;
+}
+
+.education h3,
+.experience h3 {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.college {
+  font-family: 'Rubik', sans-serif;
+  font-size: 18px;
+  color: rgb(0, 140, 255);
+  line-height: 21px;
+}
+
+.location {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 17px;
+  color: rgb(62, 62, 62);
+}
+
+.right h2 {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  color: white;
+  border-bottom: 1px solid white;
+  margin-bottom: 10px;
+}
+
+.right ul {
+  list-style: disc;
+  padding-left: 20px;
+  color: white;
+}
+
+.right ul li {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 17px;
+  font-weight: 400;
+  margin-bottom: 5px;
+}
+
+.strengths ul li::before {
+  content: "★";
+  position: absolute;
+  left: 0;
+  color: white;
+}
+
+.strengths ul li {
+  list-style: none;
+  position: relative;
+  padding-left: 20px;
+  font-family: 'Rubik', sans-serif;
+  font-size: 17px;
+  line-height: 20px;
+  color: white;
+  font-weight: 400;
+  margin-bottom: 8px;
+}
