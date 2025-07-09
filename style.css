@@ -1,0 +1,79 @@
+body {
+    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
+}
+
+.hero {
+    height: 100vh;
+    padding-top: 80px;
+    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+    transition: all 0.3s ease-in-out;
+}
+
+.about-section {
+    min-height: 100vh;
+    background: #111;
+    padding: 100px 0;
+    text-align: center;
+}
+
+.projects-section {
+    min-height: 100vh;
+    background: #1e1e2f;
+    padding: 100px 0 60px;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    color: #00ffcc !important;
+}
+
+.nav-link {
+    color: white !important;
+    font-size: 1.1rem;
+    position: relative;
+    transition: color 0.3s;
+}
+
+.nav-link:hover {
+    color: #00ffcc !important;
+}
+
+.nav-link::after {
+    content: '';
+    width: 0%;
+    height: 2px;
+    background-color: #00ffcc;
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    transition: width 0.3s;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+.project-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.project-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 20px rgba(0, 255, 204, 0.4);
+}
+
+.icons i {
+    font-size: 30px;
+    margin: 0 15px;
+    color: #00ffcc;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+}
+
+.icons i:hover {
+    transform: scale(1.3);
+    box-shadow: 0 0 8px #00ffcc;
+    border-radius: 50%;
+}
