@@ -1,0 +1,12 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.modal-title {
+    font-weight: bold;
+}
+
+input,
+select {
+    border-radius: 5px;
+}
