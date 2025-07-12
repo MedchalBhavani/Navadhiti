@@ -8,7 +8,30 @@ fetch('http://localhost:3000/employees')
     .then(res => res.json())
     .then(data => {
         employees = data;
+
+        // Check if user is already logged in
+        const savedUser = localStorage.getItem("loggedInUser");
+        if (savedUser) {
+            currentUser = JSON.parse(savedUser);
+            document.getElementById("loginSection").classList.add("d-none");
+            document.getElementById("dashboardSection").classList.remove("d-none");
+            document.getElementById("userName").textContent = currentUser.name;
+
+            if (currentUser.role === "admin") {
+                document.getElementById("adminControls").classList.remove("d-none");
+            }
+
+            if (currentUser.role === "employee") {
+                document.getElementById("passwordChangeSection").classList.remove("d-none");
+            } else {
+                document.getElementById("passwordChangeSection").classList.add("d-none");
+            }
+
+            renderTable(employees);
+            showProfile(currentUser);
+        }
     });
+
 
 document.getElementById("loginForm").addEventListener("submit", function (e) {
     e.preventDefault();

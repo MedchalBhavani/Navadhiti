@@ -1,31 +1,31 @@
 {
-    "employees": [
-        {
-            "name": "Admin",
-            "email": "admin@example.com",
-            "password": "admin123",
-            "phone": "9999999999",
-            "empId": "A001",
-            "role": "admin",
-            "id": "1"
-        },
-        {
-            "name": "Alice",
-            "email": "alice@example.com",
-            "phone": "1234567890",
-            "empId": "E001",
-            "password": "alice1234",
-            "role": "employee",
-            "id": "2"
-        },
-        {
-            "name": "Bob",
-            "email": "bob@example.com",
-            "phone": "9876543210",
-            "empId": "E002",
-            "password": "1234",
-            "role": "employee",
-            "id": "3"
-        }
-    ]
+  "employees": [
+    {
+      "name": "Admin",
+      "email": "admin@example.com",
+      "password": "admin123",
+      "phone": "9999999999",
+      "empId": "A001",
+      "role": "admin",
+      "id": "1"
+    },
+    {
+      "name": "Alice",
+      "email": "alice@example.com",
+      "phone": "1234567890",
+      "empId": "E001",
+      "password": "alice1234",
+      "role": "employee",
+      "id": "2"
+    },
+    {
+      "name": "Bob",
+      "email": "bob@example.com",
+      "phone": "9876543210",
+      "empId": "E002",
+      "password": "bob123",
+      "role": "employee",
+      "id": "3"
+    }
+  ]
 }
