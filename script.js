@@ -184,3 +184,50 @@ function logout() {
     localStorage.removeItem("loggedInUser");
     location.reload();
 }
+
+const adminModal = new bootstrap.Modal(document.getElementById('adminInfoModal'));
+const editEmpModal = new bootstrap.Modal(document.getElementById('editEmpModal'));
+document.getElementById('adminIconBtn').addEventListener('click', () => {
+    if (!currentUser || currentUser.role !== 'admin') return;
+    document.getElementById('adminInfoContent').innerHTML = `
+      <p><strong>Name:</strong> ${currentUser.name}</p>
+      <p><strong>Email:</strong> ${currentUser.email}</p>
+      <p><strong>Phone:</strong> ${currentUser.phone}</p>
+      <p><strong>Emp ID:</strong> ${currentUser.empId}</p>
+    `;
+    adminModal.show();
+});
+function openEditModal(index) {
+    const emp = employees[index];
+    document.getElementById('editIndex').value = index;
+    document.getElementById('editName').value = emp.name;
+    document.getElementById('editEmail').value = emp.email;
+    document.getElementById('editPhone').value = emp.phone;
+    document.getElementById('editEmpId').value = emp.empId;
+    document.getElementById('editRole').value = emp.role;
+    editEmpModal.show();
+}
+
+// ✅ Place THIS block below the above function
+document.getElementById('empEditForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const i = parseInt(document.getElementById('editIndex').value, 10);
+    const emp = employees[i];
+    emp.name = editName.value;
+    emp.email = editEmail.value;
+    emp.phone = editPhone.value;
+    emp.empId = editEmpId.value;
+    emp.role = editRole.value;
+
+    fetch(`http://localhost:3001/employees/${emp.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(emp)
+    }).then(() => {
+        editEmpModal.hide();
+        renderTable(employees);
+    });
+});
+
+
+
