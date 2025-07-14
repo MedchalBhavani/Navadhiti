@@ -1,42 +1,69 @@
 {
-  "admin": [
-    {
-      "name": "Admin",
-      "email": "admin@example.com",
-      "password": "admin123",
-      "phone": "9999999999",
-      "empId": "A001",
-      "role": "admin",
-      "id": "1"
-    }
-  ],
-  "employees": [
-    {
-      "name": "Alice",
-      "email": "alice@example.com",
-      "password": "alice1234",
-      "phone": "1234567890",
-      "empId": "E001",
-      "role": "employee",
-      "id": "2"
-    },
-    {
-      "name": "Bob",
-      "email": "bob@example.com",
-      "password": "bob6666",
-      "phone": "9876543210",
-      "empId": "E002",
-      "role": "employee",
-      "id": "3"
-    },
-    {
-      "id": "f372",
-      "name": "1111",
-      "email": "1111@1111",
-      "phone": "1111",
-      "empId": "1111",
-      "password": "emp123",
-      "role": "employee"
-    }
-  ]
+    "admin": [
+        {
+            "name": "Admin",
+            "email": "admin@example.com",
+            "password": "admin123",
+            "phone": "9999999999",
+            "empId": "A001",
+            "role": "admin",
+            "id": "1"
+        },
+        {
+            "name": "Admin2",
+            "email": "admin2@example.com",
+            "password": "admin1234",
+            "phone": "1234567890",
+            "empId": "E001",
+            "role": "admin",
+            "id": "2"
+        },
+        {
+            "id": "1752481466745",
+            "name": "rahul",
+            "email": "rahul@example.com",
+            "phone": "66666666666666",
+            "empId": "6666666",
+            "password": "emp123",
+            "role": "admin"
+        }
+    ],
+    "employees": [
+        {
+            "name": "alicee",
+            "email": "alicee@example.com",
+            "password": "alice1234",
+            "phone": "1234567890",
+            "empId": "E001",
+            "role": "employee",
+            "id": "2"
+        },
+        {
+            "name": "Bob",
+            "email": "bob@example.com",
+            "password": "bob6666",
+            "phone": "9876543210",
+            "empId": "E002",
+            "role": "employee",
+            "id": "3"
+        },
+        {
+            "id": "f372",
+            "name": "1111",
+            "email": "1111@1111",
+            "phone": "1111",
+            "empId": "1111",
+            "password": "emp123",
+            "role": "employee"
+        },
+        {
+            "id": "5850",
+            "name": "sudha",
+            "email": "sudha@gmail.com ",
+            "phone": "8646465464",
+            "empId": "5555",
+            "password": "emp123",
+            "role": "employee"
+        }
+    ]
 }
