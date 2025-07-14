@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Login Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" />
+    <style>
+        body {
+            background: linear-gradient(to right, #f2f6f9, #e3f2fd);
+            min-height: 100vh;
+        }
+
+        .card {
+            border-radius: 1rem;
+        }
+
+        .table th,
+        .table td {
+            vertical-align: middle;
+        }
+
+        .shadow-hover:hover {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: 0.3s;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- LOGIN SECTION -->
+    <div class="container" id="loginSection">
+        <div class="row justify-content-center align-items-center vh-100">
+            <div class="col-md-6 col-lg-5">
+                <div class="card shadow-lg p-4">
+                    <h2 class="text-center mb-4 text-primary"><i class="bi bi-person-circle"></i> Login</h2>
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" id="email" class="form-control" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" id="password" class="form-control" required />
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100"><i class="bi bi-box-arrow-in-right"></i>
+                            Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DASHBOARD SECTION -->
+    <div class="container my-5 d-none" id="dashboardSection">
+        <nav class="navbar navbar-light bg-white shadow-sm rounded mb-4 p-3">
+            <div class="container-fluid">
+                <span class="navbar-brand fw-semibold">👋 Welcome, <span id="userName"></span></span>
+                <button class="btn btn-outline-danger btn-sm" onclick="logout()"><i class="bi bi-box-arrow-left"></i>
+                    Logout</button>
+            </div>
+        </nav>
+
+        <!-- Profile -->
+        <div class="card shadow-sm p-4 mb-4">
+            <h5>Your Profile</h5>
+            <div id="profileSection"></div>
+        </div>
+
+        <!-- Change Password -->
+        <div class="card shadow-sm p-4 mb-4 d-none" id="passwordChangeSection">
+            <h6>Change Password</h6>
+            <input type="password" id="newPassword" class="form-control mb-2" placeholder="New password" />
+            <button class="btn btn-sm btn-primary" onclick="changePassword()">Update Password</button>
+        </div>
+
+        <!-- Admin Controls -->
+        <div class="card shadow-sm p-4 mb-4 d-none" id="adminControls">
+            <h5>Add New Employee</h5>
+            <form id="addForm" class="row g-2">
+                <div class="col-md-3"><input class="form-control" placeholder="Name" id="newName" required /></div>
+                <div class="col-md-3"><input class="form-control" placeholder="Email" id="newEmail" required /></div>
+                <div class="col-md-3"><input class="form-control" placeholder="Phone" id="newPhone" required /></div>
+                <div class="col-md-2"><input class="form-control" placeholder="Emp ID" id="newEmpId" required /></div>
+                <div class="col-md-1"><button type="submit" class="btn btn-success w-100">Add</button></div>
+            </form>
+        </div>
+
+        <!-- Search (Admin Only) -->
+        <div class="mb-3 d-none" id="searchContainer">
+            <input type="text" id="search" placeholder="Search by name, email or ID" class="form-control shadow-sm" />
+        </div>
+
+        <!-- Table -->
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped shadow-sm">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Emp ID</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="employeeTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
+
+
+
+js db.json
+
+
+
+/*{
+"employees": [
+{
+"name": "Admin",
+"email": "admin@example.com",
+"password": "admin123",
+"phone": "9999999999",
+"empId": "A001",
+"role": "admin",
+"id": "1"
+},
+{
+"name": "Alice",
+"email": "alice@example.com",
+"phone": "1234567890",
+"empId": "E001",
+"password": "alice1234",
+"role": "employee",
+"id": "2"
+},
+{
+"name": "Bob",
+"email": "bob@example.com",
+"phone": "9876543210",
+"empId": "E002",
+"password": "bob123",
+"role": "employee",
+"id": "3"
+}
+]
+}
