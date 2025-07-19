@@ -26,6 +26,15 @@
             "empId": "6666666",
             "password": "emp123",
             "role": "admin"
+        },
+        {
+            "id": "1752492499786",
+            "name": "sindhu",
+            "email": "duyduyf",
+            "phone": "34324",
+            "empId": "23",
+            "password": "emp123",
+            "role": "admin"
         }
     ],
     "employees": [

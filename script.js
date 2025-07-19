@@ -1,6 +1,9 @@
+// admins are stored in line2, employees in line3, and the currentuser is set to null because when the page is loaded no one is logged in 
 let admins = [];
 let employees = [];
 let currentUser = null;
+
+// Fetch admin and employee data from JSON Server, we should fetch for the link that is diaplayedd in the terminal , promise.all is a function and it is loading both simutaneously, when  both fetchedds are succesfull it gives an array once it loads it will assign admin details to admins and employee details to emloyees 
 
 Promise.all([
     fetch("http://localhost:3001/admin").then(res => res.json()),
@@ -10,16 +13,22 @@ Promise.all([
         admins = adminList;
         employees = employeeList;
 
+        // Check if user is already loggedd in previously and if the data is  in the local storage , if saved user is existing it means that a userr is alreday logged in , we convert the savedd json string into an object using parsee , then we call showDashboard function to directy show the dashboard without asking for login 
         const savedUser = localStorage.getItem("loggedInUser");
         if (savedUser) {
             currentUser = JSON.parse(savedUser);
             showDashboard(currentUser);
         }
 
+        // Login form submission , we are getting the id of the form which has mail and password and adding an event to the form , saaying when submit event is occured (when clicked on login button or presses enter , function should run , where e is the event object and pevt deft prevents default action of form submission (which will page reload ))
         document.getElementById("loginForm").addEventListener("submit", function (e) {
             e.preventDefault();
             const email = document.getElementById("email").value.trim();
             const password = document.getElementById("password").value.trim();
+
+            // Check user in both admin and employee lists and adds themto user using spread operator , find will search the combined list for a user with matching email and password , It checks each user object (u) and returns the first one that matches both email and password.
+
+
 
             const user = [...admins, ...employees].find(
                 u => u.email === email && u.password === password
@@ -27,15 +36,37 @@ Promise.all([
 
             if (!user) return alert("Invalid credentials");
 
+            //The matched user is saved in a global variable called currentUser.This can be used elsewhere in your app to track the currently logged -in user.
+
+
+
+
+
             currentUser = user;
+
+
             localStorage.setItem("loggedInUser", JSON.stringify(user));
             showDashboard(user);
         });
+
+        //The user info is stored in the browser's local storage so it persists even after a page refresh.JSON.stringify() converts the user object into a string(localStorage can only store strings).
+
+        //    //This calls a function (defined elsewhere) to update the UI.Based on the user’s role(admin or employee), it displays the correct dashboard.
+
+
+
     })
     .catch(err => {
         console.error(err);
         alert("Error loading data. Make sure JSON Server is running.");
     });
+
+
+//Logs the error in the console Shows an alert to the user: "Error loading data. Make sure JSON Server is running."
+
+
+
+
 
 function showDashboard(user) {
     document.getElementById("loginSection").classList.add("d-none");
@@ -46,7 +77,21 @@ function showDashboard(user) {
     document.getElementById("adminControls").classList.toggle("d-none", !isAdmin);
     document.getElementById("passwordChangeSection").classList.toggle("d-none", isAdmin);
 
-    showProfile(user);
+    document.getElementById("adminIconBtn")?.classList.toggle("d-none", !isAdmin);
+
+    if (user.role === "admin") {
+        fillAdminModal(user);
+    }
+
+    //showProfile(user);
+    if (user.role !== "admin") {
+        showProfile(user);
+    } else {
+        document.getElementById("profileSection").classList.add("d-none");
+    }
+
+
+
     renderTable(isAdmin ? employees : [user]);
 }
 
@@ -68,45 +113,19 @@ function renderTable(data) {
     data.forEach((emp, index) => {
         const row = document.createElement("tr");
         row.innerHTML = `
-            <td><span>${emp.name}</span><input class="form-control d-none" value="${emp.name}"></td>
-            <td><span>${emp.email}</span><input class="form-control d-none" value="${emp.email}"></td>
-            <td><span>${emp.phone}</span><input class="form-control d-none" value="${emp.phone}"></td>
-            <td><span>${emp.empId}</span><input class="form-control d-none" value="${emp.empId}"></td>
-            <td><span>${emp.role}</span></td>
+            <td>${emp.name}</td>
+            <td>${emp.email}</td>
+            <td>${emp.phone}</td>
+            <td>${emp.empId}</td>
             <td>
                 ${currentUser.role === "admin" ? `
-                <button class="btn btn-sm btn-warning" onclick="enableEdit(${index}, this)">Edit</button>
-                <button class="btn btn-sm btn-success d-none" onclick="saveEdit(${index}, this)">Save</button>
-                <button class="btn btn-sm btn-danger" onclick="deleteEmployee(${index})">Delete</button>
+                    <button class="btn btn-sm btn-primary" onclick="openEditModal(${index})">Edit</button>
+                    <button class="btn btn-sm btn-danger" onclick="deleteEmployee(${index})">Delete</button>
                 ` : ""}
             </td>
         `;
         tbody.appendChild(row);
     });
-}
-
-function enableEdit(index, btn) {
-    const row = btn.closest("tr");
-    row.querySelectorAll("span").forEach(el => el.classList.add("d-none"));
-    row.querySelectorAll("input").forEach(el => el.classList.remove("d-none"));
-    btn.classList.add("d-none");
-    btn.nextElementSibling.classList.remove("d-none");
-}
-
-function saveEdit(index, btn) {
-    const row = btn.closest("tr");
-    const inputs = row.querySelectorAll("input");
-
-    employees[index].name = inputs[0].value;
-    employees[index].email = inputs[1].value;
-    employees[index].phone = inputs[2].value;
-    employees[index].empId = inputs[3].value;
-
-    fetch(`http://localhost:3001/employees/${employees[index].id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(employees[index])
-    }).then(() => renderTable(employees));
 }
 
 function deleteEmployee(index) {
@@ -185,49 +204,21 @@ function logout() {
     location.reload();
 }
 
-const adminModal = new bootstrap.Modal(document.getElementById('adminInfoModal'));
-const editEmpModal = new bootstrap.Modal(document.getElementById('editEmpModal'));
-document.getElementById('adminIconBtn').addEventListener('click', () => {
-    if (!currentUser || currentUser.role !== 'admin') return;
-    document.getElementById('adminInfoContent').innerHTML = `
-      <p><strong>Name:</strong> ${currentUser.name}</p>
-      <p><strong>Email:</strong> ${currentUser.email}</p>
-      <p><strong>Phone:</strong> ${currentUser.phone}</p>
-      <p><strong>Emp ID:</strong> ${currentUser.empId}</p>
+function fillAdminModal(user) {
+    document.getElementById("adminModalBody").innerHTML = `
+        <p><strong>Name:</strong> ${user.name}</p>
+        <p><strong>Email:</strong> ${user.email}</p>
+        <p><strong>Phone:</strong> ${user.phone}</p>
+        <p><strong>Emp ID:</strong> ${user.empId}</p>
+        <p><strong>Role:</strong> ${user.role}</p>
     `;
-    adminModal.show();
-});
-function openEditModal(index) {
-    const emp = employees[index];
-    document.getElementById('editIndex').value = index;
-    document.getElementById('editName').value = emp.name;
-    document.getElementById('editEmail').value = emp.email;
-    document.getElementById('editPhone').value = emp.phone;
-    document.getElementById('editEmpId').value = emp.empId;
-    document.getElementById('editRole').value = emp.role;
-    editEmpModal.show();
 }
 
-// ✅ Place THIS block below the above function
-document.getElementById('empEditForm').addEventListener('submit', e => {
-    e.preventDefault();
-    const i = parseInt(document.getElementById('editIndex').value, 10);
-    const emp = employees[i];
-    emp.name = editName.value;
-    emp.email = editEmail.value;
-    emp.phone = editPhone.value;
-    emp.empId = editEmpId.value;
-    emp.role = editRole.value;
-
-    fetch(`http://localhost:3001/employees/${emp.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(emp)
-    }).then(() => {
-        editEmpModal.hide();
-        renderTable(employees);
-    });
+// Admin icon modal trigger
+const adminModal = new bootstrap.Modal(document.getElementById("adminModal"));
+document.getElementById("adminIconBtn")?.addEventListener("click", () => {
+    if (currentUser && currentUser.role === "admin") {
+        fillAdminModal(currentUser);
+        adminModal.show();
+    }
 });
-
-
-
