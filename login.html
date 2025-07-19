@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Login - Navadhiti</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+
+</head>
+
+<body>
+    <div class="bg-overlay">
+        <div class="container mt-5">
+            <div class="form-box">
+                <h2 class="text-center text-light mb-3">Login</h2>
+                <form>
+                    <input type="email" id="loginEmail" class="form-control mb-3" placeholder="Email" required />
+                    <input type="password" id="loginPassword" class="form-control mb-3" placeholder="Password"
+                        required />
+                    <div id="loginError" class="text-danger mb-2 d-none">Invalid official email or password</div>
+
+                    <button id="loginFormValidate" type="button" class="btn btn-success w-100">Login</button>
+                    <p class="text-center mt-2 text-light">New user?
+                        <a href="register.html" class="text-info">Register</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+
+
+
+    </div>
+    <script>
+        document.getElementById("loginFormValidate").addEventListener("click", async function (e) {
+            e.preventDefault();
+
+            const loginEmail = document.getElementById("loginEmail").value.trim();
+            const loginPassword = document.getElementById("loginPassword").value.trim();
+            const errorBox = document.getElementById("loginError");
+
+            console.log("Login form submitted with:", loginEmail, loginPassword);
+
+            try {
+                const response = await fetch("http://localhost:3000/user"); // Use your JSON Server URL
+                const users = await response.json();
+                console.log(users);
+
+                const employee = users.find(user =>
+                    user.officialEmail === loginEmail && user.password === loginPassword
+                );
+
+                if (employee) {
+                    alert("Login successful!");
+
+                    // OPTIONAL: Store logged-in user temporarily if needed
+                    // localStorage.setItem("loggedInUser", JSON.stringify(employee)); // remove if not using
+
+                    // Redirect based on empId status
+                    console.log(employee);
+                    if (!employee.empId || employee.empId.trim() === "") {
+                        // Redirect to employee-id page with email in query params
+                        console.log(employee);
+
+                        window.location.href = `empid.html?email=${employee.officialEmail}`;
+                    } else {
+                        window.location.href = "dashboard.html";
+                        errorBox.classList.remove("d-none");
+
+                    }
+                } else {
+                }
+
+            } catch (error) {
+                console.error("Fetch error:", error);
+                errorBox.textContent = "Unable to connect to server. Please try again later.";
+                errorBox.classList.remove("d-none");
+            }
+        });
+    </script>
+
+
+
+
+
+</body>
+
+</html>

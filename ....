@@ -1,0 +1,20 @@
+<div class="form-check">
+  <input class="form-check-input" type="radio" name="idOption" id="customizeOption" value="customize">
+  <label class="form-check-label" for="customizeOption">Customize ID</label>
+</div>
+<div class="form-check">
+  <input class="form-check-input" type="radio" name="idOption" id="defaultOption" value="default">
+  <label class="form-check-label" for="defaultOption">Default ID</label>
+</div>
+
+<!-- Customize ID input section -->
+<div id="customizeSection" class="mt-3 d-none">
+  <label for="customIdInput">Enter Custom 4-digit Number (only numbers):</label>
+  <input type="text" id="customIdInput" maxlength="4" pattern="\d{4}" class="form-control" />
+  <button id="submitCustomId" class="btn btn-primary mt-2">Generate Custom ID</button>
+</div>
+
+<!-- Default ID button section -->
+<div id="defaultSection" class="mt-3 d-none">
+  <button id="submitDefaultId" class="btn btn-success">Generate Default ID</button>
+</div>

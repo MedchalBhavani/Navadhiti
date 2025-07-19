@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Register - Navadhiti</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <div class="bg-overlay">
+        <div class="container mt-5">
+            <div class="form-box">
+                <h2 class="text-center text-light mb-3">Register</h2>
+                <form id="registerFormValidate">
+                    <input type="text" id="firstName" class="form-control mb-2" placeholder="First Name" required />
+                    <input type="text" id="lastName" class="form-control mb-2" placeholder="Last Name" required />
+
+                    <select class="form-control mb-2" id="gender" required>
+                        <option value="">Select Gender</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>Other</option>
+                    </select>
+
+                    <input type="email" id="email" class="form-control mb-2" placeholder="Email" required />
+
+                    <button type="submit" class="btn btn-primary w-100">Register</button>
+
+                    <p class="text-center mt-2 text-light">
+                        Already registered? <a href="login.html" class="text-info">Login</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { init, send } from 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/+esm';
+
+
+        // ✅ Initialize EmailJS
+        init("NFJPIaZNH6rgw4WFX"); // Public key
+
+        // ✅ Function to send email
+        async function sendEmail(email, firstName, officialEmail, password) {
+
+            console.log("from sendEmail:", email, firstName, officialEmail, password);
+            send("service_4kjbp9c", "template_76bjdgj", {
+
+                to_email: email,
+                to_name: firstName,
+                official_email: officialEmail,
+                generated_password: password,
+
+
+            })
+                .then((res) => console.log("✅ Email sent:", res))
+                .catch((err) => console.error("❌ Email failed:", err));
+        }
+
+        // ✅ Form Submission
+        document.getElementById("registerFormValidate").addEventListener("submit", async function (e) {
+            e.preventDefault();
+            console.log("Register form submitted");
+
+            const firstName = document.getElementById("firstName").value.trim();
+            const lastName = document.getElementById("lastName").value.trim();
+            const gender = document.getElementById("gender").value;
+            const personalEmail = document.getElementById("email").value.trim();
+
+            console.log("Form data:", { firstName, lastName, gender, personalEmail });
+
+            const password = `Emp@${Math.floor(1000 + Math.random() * 9000)}`;
+            const id = Date.now();
+            const officialEmail = `emp${id}@navadhiti.com`;
+
+            console.log("Generated Credentials:", { officialEmail, password });
+
+            const employee = {
+                firstName,
+                lastName,
+                gender,
+
+                personalEmail,
+                officialEmail,
+                password,
+                empId: "",
+
+                role: "employee"//we have put here by default , and while adding user whomever the SA specifies(admin,employee)is added.
+            };
+
+            //data that should be found in db.json is  specified here 
+
+            try {
+                const res = await fetch("http://localhost:3000/user", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(employee)
+                });
+
+                console.log("Server Response:", res);
+
+                if (res.ok) {
+                    await sendEmail(personalEmail, `${firstName} ${lastName}`, officialEmail, password);
+
+
+                    alert("Registered successfully! Credentials sent to your email.");
+                } else {
+                    alert("Error during registration.");
+                }
+            } catch (err) {
+                console.error("❌ Server error:", err);
+            }
+        });
+    </script>
+
+</body>
+
+</html>

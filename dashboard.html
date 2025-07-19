@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Super Admin Dashboard</title>
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <div class="sidebar p-3">
+            <h4>Hello SuperAdmin</h4>
+            <ul class="nav flex-column mt-4">
+                <li class="nav-item"><a href="#" class="nav-link" id="profileBtn">Profile</a></li>
+                <li class="nav-item"><a href="#" class="nav-link" id="addUserBtn">Add New User</a></li>
+                <li class="nav-item"><a href="#" class="nav-link text-danger" id="logoutBtn">Logout</a></li>
+                <li class="nav-item"><a href="#" class="nav-link" id="resetPasswordBtn">Reset Password</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content p-4 w-100">
+            <h2>Employee List</h2>
+            <table class="table mt-3 table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Emp ID</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="employeeTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade id=" userModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="userForm">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Employee Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="userId" />
+                        <div class="mb-2">
+                            <label>Name</label>
+                            <input type="text" class="form-control" id="userName" required />
+                        </div>
+                        <div class="mb-2">
+                            <label>Email</label>
+                            <input type="email" class="form-control" id="userEmail" required />
+                        </div>
+                        <div class="mb-2">
+                            <label>Emp ID</label>
+                            <input type="text" class="form-control" id="userEmpId" required />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Save Changes</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        const employeeTableBody = document.getElementById("employeeTableBody");
+        const userModal = document.getElementById("userModal");
+        const userForm = document.getElementById("userForm");
+
+        const userName = document.getElementById("userName");
+        const userEmail = document.getElementById("userEmail");
+        const userEmpId = document.getElementById("userEmpId");
+        const userId = document.getElementById("userId");
+
+        const apiUrl = "http://localhost:3000/user";
+
+        // Load employees
+        async function loadEmployees() {
+            // console.log(loadEmployees());
+            const res = await fetch(apiUrl);
+            const data = await res.json();
+
+            const employees = data.filter(user => user.role === "employee");
+
+            employeeTableBody.innerHTML = "";
+
+            employees.forEach(emp => {
+                console.log(emp)
+                const row = document.createElement("tr");
+                row.innerHTML = `
+            <td>${emp.firstName} ${emp.lastName}</td>
+            <td>${emp.empId}</td>
+            <td>
+                <button class="btn btn-info btn-sm me-1" onclick="viewUser('${emp.id}')">View</button>
+                <button class="btn btn-warning btn-sm me-1" onclick="editUser('${emp.id}')">Edit</button>
+                <button class="btn btn-danger btn-sm" onclick="deleteUser('${emp.id}')">Delete</button>
+            </td>
+        `;
+                employeeTableBody.appendChild(row);
+            });
+        }
+
+        // View user
+        async function viewUser(id) {
+            const res = await fetch(`${apiUrl}/${id}`);
+            const user = await res.json();
+
+            userId.value = user.id;
+            userName.value = user.name;
+            userEmail.value = user.email;
+            userEmpId.value = user.empId;
+
+            userName.disabled = true;
+            userEmail.disabled = true;
+            userEmpId.disabled = true;
+
+            userForm.querySelector("button[type='submit']").style.display = "none";
+
+            userModal.show();
+        }
+
+        // Edit user
+        async function editUser(id) {
+            const res = await fetch(`${apiUrl}/${id}`);
+            const user = await res.json();
+
+            userId.value = user.id;
+            userName.value = user.name;
+            userEmail.value = user.email;
+            userEmpId.value = user.empId;
+
+            userName.disabled = false;
+            userEmail.disabled = false;
+            userEmpId.disabled = false;
+
+            userForm.querySelector("button[type='submit']").style.display = "inline-block";
+
+            userModal.show();
+        }
+
+        // Save changes
+        userForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const updatedUser = {
+                name: userName.value,
+                email: userEmail.value,
+                empId: userEmpId.value
+            };
+
+            const res = await fetch(`${apiUrl}/${userId.value}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(updatedUser)
+            });
+
+            if (res.ok) {
+                alert("User updated!");
+                userModal.hide();
+                loadEmployees();
+            } else {
+                alert("Update failed");
+            }
+        });
+
+        // Delete user
+        async function deleteUser(id) {
+            console.log(id);
+            if (confirm("Are you sure to delete this user?")) {
+                const res = await fetch(`${apiUrl}/${id}`, {
+                    method: "DELETE"
+                });
+                if (res.ok) {
+                    loadEmployees();
+                } else {
+                    alert("Failed to delete");
+                }
+            }
+        }
+
+        // Initial load
+        // window.addEventListener("DOMContentLoaded", loadEmployees);
+        // window.onload = loadEmployees;
+        window.onload = function () {
+            loadEmployees();
+        };
+
+
+
+    </script>
+
+
+</body>
+
+</html>

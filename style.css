@@ -1,0 +1,108 @@
+body,
+html {
+    height: 100%;
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+
+
+.bg-overlay {
+    background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)),
+        url('https://images.unsplash.com/photo-1557682260-9670cdb2483d') no-repeat center center/cover;
+    min-height: 100vh;
+    width: 100%;
+    overflow-y: auto;
+}
+
+.navbar {
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 12px;
+}
+
+.nav-btn {
+    color: #ffffff;
+    background-color: transparent;
+    border: 2px solid #ffffff;
+    transition: all 0.3s ease;
+    border-radius: 25px;
+    padding: 6px 20px;
+}
+
+.nav-btn:hover {
+    background-color: lightskyblue;
+    border-color: #61799c;
+    color: white;
+    transform: scale(1.05);
+}
+
+.form-box {
+    max-width: 450px;
+    margin: auto;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 25px 30px;
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+    animation: fadeIn 0.5s ease;
+    color: white;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/*emp id css*/
+
+body {
+    background: linear-gradient(to right, #74ebd5, #acb6e5);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.id-box {
+    background-color: #ffffff;
+    max-width: 500px;
+    margin: auto;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/*dashboard css*/
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+    border-right: 1px solid #ddd;
+}
+
+.sidebar h4 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.sidebar .nav-link {
+    color: #333;
+    padding: 10px 15px;
+    border-radius: 4px;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #e2e6ea;
+}
+
+.main-content {
+    flex-grow: 1;
+}

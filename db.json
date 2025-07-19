@@ -1,0 +1,15 @@
+{
+  "user": [
+    {
+      "id": "cfec",
+      "firstName": "Bhavani",
+      "lastName": "Medchal",
+      "gender": "Female",
+      "personalEmail": "bhavanimedchal5900@gmail.com",
+      "officialEmail": "emp1752847717919@navadhiti.com",
+      "password": "Emp@9957",
+      "empId": "ND7421",
+      "role": "employee"
+    }
+  ]
+}

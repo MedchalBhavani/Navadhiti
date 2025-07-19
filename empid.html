@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Generate Employee ID</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+
+
+
+
+
+<body>
+    <form id="generateEmpId">
+        <div class="container mt-5">
+            <div class="id-box p-4">
+                <h2 class="text-center mb-4">Generate Your Employee ID</h2>
+
+                <div class="d-flex justify-content-around mb-4">
+                    <button id="customBtn" type="button" class="btn btn-outline-primary">Customize Your ID</button>
+                    <button id="defaultBtn" type="button" class="btn btn-outline-success">Use Default ID</button>
+                </div>
+
+                <div id="customSection" class="d-none">
+                    <label for="customInput" class="form-label">Enter 4-digit number:</label>
+                    <input type="text" id="customInput" maxlength="4" class="form-control mb-2"
+                        placeholder="Only numbers">
+                    <div id="customError" class="text-danger d-none">Please enter a valid and unique 4-digit number.
+                    </div>
+                    <button class="btn btn-primary w-100" id="submitCustomId">Submit Custom ID</button>
+                </div>
+
+                <div id="generatedIdSection" class="mt-4 d-none text-center">
+                    <h5>Your Employee ID:</h5>
+                    <p id="generatedEmpId" class="fs-4 fw-bold text-success"></p>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </form>
+
+    <script>
+        const customBtn = document.getElementById("customBtn");
+        const defaultBtn = document.getElementById("defaultBtn");
+        const customSection = document.getElementById("customSection");
+        const customInput = document.getElementById("customInput");
+        const customError = document.getElementById("customError");
+        const submitCustomId = document.getElementById("submitCustomId");
+        const generatedEmpId = document.getElementById("generatedEmpId");
+        const generatedIdSection = document.getElementById("generatedIdSection");
+
+        const EMP_ID_PREFIX = "ND";
+        const dbUrl = "http://localhost:3000/user";
+
+        let currentUser = null;
+        let empIdGenerated = false;
+
+        async function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        async function fetchCurrentUser() {
+            const email = await getQueryParam("email");
+            if (!email) {
+                alert("No user info found!");
+                window.location.href = "login.html";
+                return;
+            }
+
+            const res = await fetch(`${dbUrl}?officialEmail=${email}`);
+            const users = await res.json();
+            if (users.length === 0) {
+                alert("User not found!");
+                window.location.href = "login.html";
+                return;
+            }
+
+            currentUser = users[0];
+        }
+
+        async function fetchAllUsers() {
+            const res = await fetch(dbUrl);
+            return res.json();
+        }
+
+        async function isUniqueEmpId(empId) {
+            const users = await fetchAllUsers();
+            return !users.some(user => user.empId === empId);
+        }
+
+        async function updateEmpIdInDB(empId) {
+            const response = await fetch(`${dbUrl}/${currentUser.id}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ empId })
+            });
+
+            if (response.ok) {
+                empIdGenerated = true;
+                generatedEmpId.textContent = empId;
+                generatedIdSection.classList.remove("d-none");
+                alert(`Employee ID assigned successfully: ${empId}`);
+                disableAllControls();
+
+                // Redirect to dashboard after a short delay (optional)
+                setTimeout(() => {
+                    console.log("Redirecting to dashboard...");
+
+                    window.location.href = "dashboard.html";
+                }, 800); // 800ms delay for user to see the alert
+            } else {
+                alert("Failed to assign Employee ID. Try again.");
+            }
+        }
+
+
+        async function generateRandomEmpId() {
+            if (empIdGenerated) return;
+
+            let empId;
+            do {
+                const random = Math.floor(1000 + Math.random() * 9000);
+                empId = `${EMP_ID_PREFIX}${random}`;
+            } while (!(await isUniqueEmpId(empId)));
+
+            await updateEmpIdInDB(empId);
+        }
+
+        function disableAllControls() {
+            customBtn.disabled = true;
+            defaultBtn.disabled = true;
+            submitCustomId.disabled = true;
+            customInput.disabled = true;
+        }
+
+        // Customize button clicked
+        customBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            if (empIdGenerated) return;
+
+            customBtn.disabled = true;
+            defaultBtn.disabled = true;
+
+            customSection.classList.remove("d-none");
+            customInput.value = "";
+            customError.classList.add("d-none");
+        });
+
+        // Submit custom ID
+        submitCustomId.addEventListener("click", async (e) => {
+            e.preventDefault();
+            if (empIdGenerated) return;
+
+            const digits = customInput.value.trim();
+            if (!/^\d{4}$/.test(digits)) {
+                customError.textContent = "Enter exactly 4 digits.";
+                customError.classList.remove("d-none");
+                return;
+            }
+
+            const empId = `${EMP_ID_PREFIX}${digits}`;
+            if (!(await isUniqueEmpId(empId))) {
+                customError.textContent = "Employee ID already exists.";
+                customError.classList.remove("d-none");
+                return;
+            }
+
+            customError.classList.add("d-none");
+            await updateEmpIdInDB(empId);
+        });
+
+        // Default button clicked
+        defaultBtn.addEventListener("click", async (e) => {
+            e.preventDefault();
+            if (empIdGenerated) return;
+
+            defaultBtn.disabled = true;
+            customBtn.disabled = true;
+            customSection.classList.add("d-none");
+            await generateRandomEmpId();
+        });
+
+        window.addEventListener("DOMContentLoaded", async () => {
+            await fetchCurrentUser();
+        });
+    </script>
+
+
+</body>
+
+</html>
